@@ -342,6 +342,37 @@
             padding-top: 10px;
             padding-left: 20px;
         }
+
+        .tech-tags {
+            margin-top: 15px;
+        }
+
+        .tech-tag {
+            border: 1px solid var(--accent-color);
+            background-color: var(--bg-color);
+            border-radius: 15px;
+            padding: 4px 8px;
+            margin: 0px 0;
+            font-size: 0.7rem;
+            color: var(--text-color);
+            transition: var(--transition);
+            text-align: center;
+            vertical-align: middle;
+            line-height: 15px;
+            display: inline-block;
+        }
+
+        .tech-tag-hidden {
+            display: none;
+        }
+
+        .tech-tags-toggle {
+            cursor: pointer;
+            font-size: 0.8rem;
+            color: var(--primary-color);
+            margin-left: 5px;
+            transition: var(--transition);
+        }
         
         .date {
             display: inline-block;
@@ -602,6 +633,48 @@
             }
         }
     </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const techTagContainers = document.querySelectorAll('.tech-tags');
+            
+            techTagContainers.forEach(container => {
+                const techTags = container.querySelectorAll('.tech-tag');
+                
+                if (techTags.length > 5) {
+                    // Only show first 5 tags
+                    for (let i = 5; i < techTags.length; i++) {
+                        techTags[i].classList.add('tech-tag-hidden');
+                    }
+                    
+                    // Create show more toggle
+                    const showMoreToggle = document.createElement('span');
+                    showMoreToggle.classList.add('tech-tags-toggle');
+                    showMoreToggle.innerText = `+${techTags.length - 5} More`;
+                    showMoreToggle.addEventListener('click', function() {
+                        container.querySelectorAll('.tech-tag-hidden').forEach(tag => {
+                            tag.classList.remove('tech-tag-hidden');
+                        });
+                        this.classList.add('tech-tag-hidden');
+                        showLessToggle.classList.remove('tech-tag-hidden');
+                    });
+                    container.appendChild(showMoreToggle);
+                    
+                    // Create show less toggle
+                    const showLessToggle = document.createElement('span');
+                    showLessToggle.classList.add('tech-tags-toggle', 'tech-tag-hidden');
+                    showLessToggle.innerText = 'Less';
+                    showLessToggle.addEventListener('click', function() {
+                        for (let i = 5; i < techTags.length; i++) {
+                            techTags[i].classList.add('tech-tag-hidden');
+                        }
+                        this.classList.add('tech-tag-hidden');
+                        showMoreToggle.classList.remove('tech-tag-hidden');
+                    });
+                    container.appendChild(showLessToggle);
+                }
+            });
+        });
+    </script>
 </head>
 <body>
     <!-- Hero Section -->
@@ -688,8 +761,7 @@
                     {{ $count := 0 }}
                     {{ range .Career }}
                         {{ range .Missions }}
-                            {{ $count = inc $count }}
-                            <div class="timeline-item {{ if odd $count }}left{{ else }}right{{ end }}">
+                            <div class="timeline-item {{ if even $count }}left{{ else }}right{{ end }}">
                                 <div class="timeline-content">
                                     <span class="date">{{ .Dates }}</span>
                                     <h3>{{ .Position }}</h3>
@@ -700,8 +772,16 @@
                                             <li>{{ . }}</li>
                                         {{ end }}
                                     </ul>
+                                    {{ if .Technologies }}
+                                    <div class="tech-tags">
+                                        {{ range .Technologies }}
+                                            <span class="tech-tag">{{ . }}</span>
+                                        {{ end }}
+                                    </div>
+                                    {{ end }}
                                 </div>
                             </div>
+                            {{ $count = add $count 1 }}
                         {{ end }}
                     {{ end }}
                 </div>
