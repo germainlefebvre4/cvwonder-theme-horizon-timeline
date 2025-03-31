@@ -140,11 +140,11 @@
         }
         
         .content {
-            padding: 80px 0;
+            padding: 0px 0;
         }
         
         section {
-            margin-bottom: 100px;
+            margin-bottom: 50px;
             position: relative;
         }
         
@@ -204,6 +204,7 @@
             box-shadow: var(--box-shadow);
             font-size: 0.9rem;
             transition: var(--transition);
+            color: var(--text-color);
         }
         
         .contact-item:hover {
@@ -311,11 +312,11 @@
         }
         
         .left::after {
-            right: -13px;
+            right: -16px;
         }
         
         .right::after {
-            left: -12px;
+            left: -16px;
         }
         
         .timeline-content {
@@ -325,10 +326,21 @@
             border-radius: var(--border-radius);
             box-shadow: var(--box-shadow);
             transition: var(--transition);
+            text-align: left;
         }
         
         .timeline-content:hover {
             transform: translateY(-5px);
+        }
+
+        .timeline-content p {
+            padding-top: 10px;
+            text-align: justify;
+        }
+
+        .timeline-content ul {
+            padding-top: 10px;
+            padding-left: 20px;
         }
         
         .date {
@@ -605,34 +617,38 @@
                     <i class="fas fa-envelope"></i>
                     <a href="mailto:{{ .Person.Email }}">{{ .Person.Email }}</a>
                 </div>
+                {{ if .Person.Phone }}
                 <div class="contact-item">
                     <i class="fas fa-phone"></i>
                     <span>{{ .Person.Phone }}</span>
                 </div>
+                {{ end }}
+                {{ if .Person.Location }}
                 <div class="contact-item">
                     <i class="fas fa-map-marker-alt"></i>
                     <span>{{ .Person.Location }}</span>
                 </div>
+                {{ end }}
                 {{ if .Person.Site }}
                 <div class="contact-item">
                     <i class="fas fa-globe"></i>
-                    <a href="{{ .Person.Site }}">{{ .Person.Site }}</a>
+                    <a href="{{ .Person.Site }}" target="_blank">{{ .Person.Site }}</a>
                 </div>
                 {{ end }}
             </div>
             <div class="social-links">
                 {{ if .SocialNetworks.Github }}
-                <a href="https://github.com/{{ .SocialNetworks.Github }}" class="social-btn">
+                <a href="https://github.com/{{ .SocialNetworks.Github }}" class="social-btn"target="_blank">
                     <i class="fab fa-github"></i>
                 </a>
                 {{ end }}
                 {{ if .SocialNetworks.Linkedin }}
-                <a href="https://linkedin.com/in/{{ .SocialNetworks.Linkedin }}" class="social-btn">
+                <a href="https://linkedin.com/in/{{ .SocialNetworks.Linkedin }}" class="social-btn"target="_blank">
                     <i class="fab fa-linkedin-in"></i>
                 </a>
                 {{ end }}
                 {{ if .SocialNetworks.Twitter }}
-                <a href="https://twitter.com/{{ .SocialNetworks.Twitter }}" class="social-btn">
+                <a href="https://x.com/{{ .SocialNetworks.Twitter }}" class="social-btn"target="_blank">
                     <i class="fab fa-twitter"></i>
                 </a>
                 {{ end }}
@@ -672,7 +688,8 @@
                     {{ $count := 0 }}
                     {{ range .Career }}
                         {{ range .Missions }}
-                            <div class="timeline-item {{ if eq $count 0 }}left{{ else }}right{{ end }}">
+                            {{ $count = inc $count }}
+                            <div class="timeline-item {{ if odd $count }}left{{ else }}right{{ end }}">
                                 <div class="timeline-content">
                                     <span class="date">{{ .Dates }}</span>
                                     <h3>{{ .Position }}</h3>
@@ -700,7 +717,7 @@
                                 <h3 class="project-title">{{ .Name }}</h3>
                                 <p class="project-desc">{{ .Description }}</p>
                                 {{ if .Link }}
-                                <a href="https://github.com/{{ .Link }}" class="project-link">
+                                <a href="https://github.com/{{ .Link }}" class="project-link" target="_blank">
                                     <i class="fab fa-github"></i> View Project
                                 </a>
                                 {{ end }}
@@ -753,7 +770,7 @@
                             <p class="cert-issuer">{{ .Issuer }}</p>
                             <p class="cert-date">{{ .Date }}</p>
                             {{ if .Link }}
-                            <a href="{{ .Link }}" class="project-link">View Certificate</a>
+                            <a href="{{ .Link }}" class="project-link" target="_blank">View Certificate</a>
                             {{ end }}
                         </div>
                     {{ end }}
