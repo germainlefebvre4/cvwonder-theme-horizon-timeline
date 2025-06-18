@@ -59,7 +59,7 @@
             <h1>{{ .Person.Name }}</h1>
             <h2>{{ .Person.Profession }}</h2>
             {{ range .Abstract }}
-                <p>{{ .Tr }}</p>
+                <p>{{ . }}</p>
             {{ end }}
             <div class="contact-info">
                 <div class="contact-item">
